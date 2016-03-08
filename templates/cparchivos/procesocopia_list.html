@@ -1,0 +1,47 @@
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+{{ procesocopia_list}}
+	<h2>Procesos</h2>
+		<form method="get" action="/cparchivos/procesos/">
+		<p><label for="id_q">Filtro (nombre):</label>
+		<input type="text" name="q" id="id_q" value="{{ query }}" />
+		<input type="submit" value="Buscar" /></p>
+		</form>	
+  <table class="table table-hover">
+    <thead>
+      <tr>
+		<th></th>
+		<th></th>		  
+        <th>Nombre</th>
+      </tr>
+    </thead>
+    <tbody>	 	
+    {% for proceso in procesocopia_list %}
+	<tr>
+		<td></td>
+		<td><td><a href="{% url "cparchivos:proceso_correr" proceso.id %}" >
+		<img src= "{% static "images/accion_ejecutar.png"%}" data-toggle="tooltip" data-placement="top" title="Ejecutar" alt= "Ejecutar">
+		</a></td></td>
+		<td>{{ proceso.nombre }}</td>
+	</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if is_paginated %}
+      <div class="pagination">
+          <span class="page-links">
+              {% if page_obj.has_previous %}
+                  <a href="/cparchivos/procesos?q={{query}}&page={{ page_obj.previous_page_number }}">anterior</a>
+              {% endif %}
+              <span class="page-current">
+                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+              </span>
+              {% if page_obj.has_next %}
+                  <a href="/cparchivos/procesos?q={{query}}&page={{ page_obj.next_page_number }}">siguiente</a>
+              {% endif %}
+          </span>
+      </div>
+  {% endif %}	
+</div>	
+{% endblock content %}
